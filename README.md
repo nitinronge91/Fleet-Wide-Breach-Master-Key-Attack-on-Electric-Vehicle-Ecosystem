@@ -42,7 +42,7 @@ Also, we confirmed the key fob is unpaired from Body control module ECU by using
  *Confirmed the key fob is unpaired from ECU*
 
 
- # Pairing Attacker key fob with vehicle:
+ # Pairing Attacker key fob with vehicle
 As stated in section ‘Key Fob pairing with Vehicle’ , for pairing the key fob after UDS routine started, user has to press lock and unlock button from key fob. We pressed lock and unlocked buttons from key fob at the same time and captured the signal using HackRF device and analysed the spectrum. We referred it as **‘key pairing signal’**. 
 
 ![image](https://github.com/user-attachments/assets/7f681d41-f229-4339-b69d-da332b6720bd)
@@ -88,12 +88,12 @@ We were successfully able to pair same single key fob with three different Body 
 Attacker can pair key fob with any vehicle of these vehicle models with the help of captured key fob signal and can gain unauthorised access to the vehicle. 
 
 
-# Real Life Attack scenario:
+# Real Life Attack scenario
 In real life this attack is possible on these vehicle models. For this attack attacker needs physical access of OBDII port to connect bluetooth dongle and key fob of any of these vehicle models which will be easily available in market. For physical access of OBDII port, attacker can bribe service technician at garage can get physical access to OBD port. Once he gets access to OBD port, attacker can connect bluetooth dongle to OBD port which will execute the UDS commands remotely. When the vehicle owner is not near by the vehicle proximity, attacker can execute the UDS commands to start UDS pairing routine remotely. Once the pairing routine started, he can replay the key pairing signal using HackRF device remotely. Key fob can be paired from distance up to 5 meters from the vehicle.
 Once the key fob is paired with vehicle, attacker can gain unauthorised access to vehicle. With this access attacker can steal the vehicle or belongings of the owner kept inside the vehicle. 
 
 
-# Countermeasures:
+# Countermeasures
 We reported this vulnerability to the vehicle manufacturer and proposed the mitigation measures that could minimize the risk of this attack. Below are the mitigation measures.
 •	Use Advanced Encryption: Choose key fob systems that employ strong encryption methods, such as AES (Advanced Encryption Standard). These encryption techniques make it extremely difficult for attackers to intercept and clone the signals. 
 •	Rolling Code Technology: This technology changes the code transmitted by the key fob with each use. Even if an attacker intercepts one code, it won't work again, making it very secure. Most modern key fobs use this technology. 
