@@ -29,8 +29,8 @@ so, attacker can unpair existing owner key fob and which can cause inconvenience
 
 
 ![image](https://github.com/user-attachments/assets/332f3f48-9f41-46ad-b892-68105964e63c)
-
- *Unpair existing Keyfob using routine control service*
+      
+*Unpair existing Keyfob using routine control service*
 
 Also, we confirmed the key fob is unpaired from Body control module ECU by using UDS read DID service($22). Read DID 0xFD02 and ECU responded with positive response with data as 0x00. It means no key paired with ECU currently.
 
