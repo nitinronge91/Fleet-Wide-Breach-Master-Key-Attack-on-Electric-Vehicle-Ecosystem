@@ -29,7 +29,8 @@ so, attacker can unpair existing owner key fob and which can cause inconvenience
 
 
 ![image](https://github.com/user-attachments/assets/332f3f48-9f41-46ad-b892-68105964e63c)
-Unpair existing Keyfob using routine control service
+
+ *Unpair existing Keyfob using routine control service*
 
 Also, we confirmed the key fob is unpaired from Body control module ECU by using UDS read DID service($22). Read DID 0xFD02 and ECU responded with positive response with data as 0x00. It means no key paired with ECU currently.
 
@@ -38,19 +39,19 @@ Also, we confirmed the key fob is unpaired from Body control module ECU by using
     Positive response 			        :6yy 0x04 0x62 0xFD 0x02 0x00
 
  ![image](https://github.com/user-attachments/assets/ab45e316-3bab-41d9-b458-0e26073daeb5)
-Confirmed the key fob is unpaired from ECU
+ *Confirmed the key fob is unpaired from ECU*
 
 
  # Pairing Attacker key fob with vehicle:
 As stated in section ‘Key Fob pairing with Vehicle’ , for pairing the key fob after UDS routine started, user has to press lock and unlock button from key fob. We pressed lock and unlocked buttons from key fob at the same time and captured the signal using HackRF device and analysed the spectrum. We referred it as **‘key pairing signal’**. 
 
 ![image](https://github.com/user-attachments/assets/7f681d41-f229-4339-b69d-da332b6720bd)
-Captured key pairing signal.
+*Captured key pairing signal*
 
 After capturing the key pairing signal, we unpaired the paired key fob using UDS routine control services with routine identifier 0x0207 as stated in above section and started key pairing UDS routine with routine identifier 0x0206. Once the routine started, we replayed the captured key pairing signal using HackRF device. This signal can be paired from a distance up to 5 meters.
 
 ![image](https://github.com/user-attachments/assets/f0a40363-06c1-4d24-85fd-cfccaccc17e9)
-Replayed the captured key pairing signal to the Body control module ECU for key pairing
+*Replayed the captured key pairing signal to the Body control module ECU for key pairing*
 
 
 Upon completion of replaying captured signal from HackRF device, we confirmed whether key fob paired with Body control module ECU or not, by pressing buttons from key fob. After pressing lock or unlock button from key fob, relays on Body control module ECU cranked. it indicates that key fob is paired with vehicle. Also, we verified it by UDS service read Data identifier($22) with identifier value 0xFD02. ECU responded with positive response with data as 0x01, it shows that one key fob is paired with vehicle.
@@ -63,17 +64,16 @@ Upon completion of replaying captured signal from HackRF device, we confirmed wh
 
 
 ![image](https://github.com/user-attachments/assets/d9c0a950-ffa1-4797-8aed-7e89b04e53a5)
+*Pair the key fob using routine control service*
 
-Pair the key fob using routine control service
-
-Confirm key fob paired with read DID 0xFD02.
+Confirm key fob paired with read UDS service using  DID 0xFD02.
 
         Read number of key fob paired with Vehicle DID 	:6xx 0x03 0x22 0xFD 0x02
         Positive response 			     		:6yy 0x04 0x62 0xFD 0x02 0x01
 
 
 ![image](https://github.com/user-attachments/assets/09b7f08f-e642-480e-aaf4-c9d84878c3b2)
-Confirm key fob paired with ECU
+*Confirm key fob paired with ECU*
 
 As there is no security access implemented in system specific session, we were able to start key pairing routine and for key pairing there is no freshness counter or rolling code implemented so, captured pairing signal is valid for any time duration. whenever we replay the captured signal, the key fob gets paired with vehicle. The authentication algorithm  for LF-RF communication between key fob and Body control module ECU is weak. So, after replaying pairing signal from HackRF device original key fob is paired with Body control module ECU. 
 
@@ -81,11 +81,10 @@ As there is no security access implemented in system specific session, we were a
 After pairing key fob with captured key pairing signal with single ECU. We took Body control module ECU from other two different vehicle models of same OEM and performed the same procedure of unpairing the paired key fob and pairing the same key fob by replaying captured key pairing signal with the help of HackRF device.
 
 ![IMG-20240313-WA0005](https://github.com/user-attachments/assets/5cb0dcdc-5554-436c-b8b6-baf4c2cda85d)
+*Lab set up for two Body control module ECU from different vehicle models,single key fob paired with two different ECU by replaying captured key fob signal*
 
-Lab set up for two Body control module ECU from different vehicle models,single key fob paired with two different ECU by replaying captured key fob signal.
 
 We were successfully able to pair same single key fob with three different Body control module ECUs from different vehicle models.
-
 Attacker can pair key fob with any vehicle of these vehicle models with the help of captured key fob signal and can gain unauthorised access to the vehicle. 
 
 
