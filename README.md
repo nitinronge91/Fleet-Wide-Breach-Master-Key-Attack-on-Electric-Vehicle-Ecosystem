@@ -97,8 +97,13 @@ Attacker can pair key fob with any vehicle of these vehicle models with the help
 
 
 # Real Life Attack scenario
-In real life this attack is possible on these vehicle models. For this attack attacker needs physical access of OBDII port to connect bluetooth dongle and key fob of any of these vehicle models which will be easily available in market. For physical access of OBDII port, attacker can bribe service technician at garage can get physical access to OBD port. Once he gets access to OBD port, attacker can connect bluetooth dongle to OBD port which will execute the UDS commands remotely. When the vehicle owner is not near by the vehicle proximity, attacker can execute the UDS commands to start UDS pairing routine remotely. Once the pairing routine started, he can replay the key pairing signal using HackRF device remotely. Key fob can be paired from distance up to 5 meters from the vehicle.
-Once the key fob is paired with vehicle, attacker can gain unauthorised access to vehicle. With this access attacker can steal the vehicle or belongings of the owner kept inside the vehicle. 
+This attack is feasible in real-world scenarios across the affected vehicle models. To execute the attack, the adversary requires physical access to the vehicle’s OBD-II port, a compatible Bluetooth dongle, and a key fob model commonly available in the aftermarket.
+
+Physical access to the OBD-II port may be obtained by compromising a third party, such as bribing a service technician at a garage. Once access is granted, the attacker can connect a Bluetooth-enabled dongle to the OBD-II port, enabling remote execution of UDS (Unified Diagnostic Services) commands.
+
+When the legitimate vehicle owner is not within proximity (i.e., outside the keyless entry range), the attacker can remotely initiate the UDS pairing procedure. During this window, the attacker uses a software-defined radio device (e.g., HackRF) to replay the pairing signal. The key fob can be successfully paired from a distance of up to 5 meters from the vehicle.
+
+Once the unauthorized key fob is paired, the attacker gains full access to the vehicle, allowing them to unlock doors, start the engine, and potentially steal the vehicle or valuables stored inside.
 
 <div align="center">
   
