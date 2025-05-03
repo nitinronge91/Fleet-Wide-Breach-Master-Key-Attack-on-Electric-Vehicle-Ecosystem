@@ -2,8 +2,10 @@
 
 # Abstract
 
-We demonstrated master key fob attack on different vehicle models of electric car manufacturing OEM. In this attack we exploited vulnerability in the key fob pairing process and UDS (Unified Diagnostic Services) service implemented. For master key attack we were able to unpair the existing paired vehicle owner key fob and paired the new key fob with UDS attack and RF replay attack.
-Similar key fob pairing technique is used in all vehicle models of an OEM.So, we unpaired the existing paired vehicle owner key fob and paired our key fob with all different vehicle models of same OEM. POC is performed on component level (on ECU) and real-life attack scenario is performed on vehicles. Attacker can access the different vehicle models of an OEM using master key. So, single key fob can work as Master key for all vehicle models.
+We conducted a demonstration of a master key fob attack across multiple vehicle models from a major electric vehicle OEM. This attack leveraged vulnerabilities in both the key fob pairing process and the implementation of Unified Diagnostic Services (UDS). By exploiting these weaknesses, we were able to unpair the legitimate vehicle owner’s key fob and successfully pair a new, unauthorized key fob(from the same OEM) using a combination of UDS-based attacks and RF replay techniques.
+
+Notably, the key fob pairing mechanism is consistent across all vehicle models from the same OEM. As a result, we were able to replicate this attack on various models, highlighting a systemic vulnerability. Our proof-of-concept (PoC) was initially validated at the ECU (Electronic Control Unit) level and later executed in real-world scenarios on actual vehicles. This demonstrates that an attacker could gain access to multiple vehicle models using a single unauthorized key fob, effectively creating a “master key” applicable across the OEM's entire lineup.
+We responsibly disclosed this vulnerability to the OEM, and the issue has since been remediated across all affected vehicle models.
 
 
 # Introduction
@@ -25,12 +27,10 @@ so, attacker can unpair existing owner key fob and which can cause inconvenience
     Positive response			           :6yy 0x06 0x50 0x60 0x00 0x32 0x00 0xc8 
     Start erase key fob routine request 		   :6xx 0x04 0x31 0x01 0x02 0x07
     Positive response 		                   :6yy 0x04 0x71 0x01 0x02 0x07
-
-
-
-![image](https://github.com/user-attachments/assets/332f3f48-9f41-46ad-b892-68105964e63c)
-      
-*Unpair existing Keyfob using routine control service*
+<div align="center">
+  <img width="691" alt="unpair_keyfob" src="https://github.com/user-attachments/assets/e9d164ff-83d9-4cde-b64c-e54ce9840711" />
+</div>
+ 
 
 Also, we confirmed the key fob is unpaired from Body control module ECU by using UDS read DID service($22). Read DID 0xFD02 and ECU responded with positive response with data as 0x00. It means no key paired with ECU currently.
 
@@ -38,8 +38,10 @@ Also, we confirmed the key fob is unpaired from Body control module ECU by using
     Read number of key fob paired with Vehicle DID 	:6xx 0x03 0x22 0xFD 0x02
     Positive response 			        :6yy 0x04 0x62 0xFD 0x02 0x00
 
- ![image](https://github.com/user-attachments/assets/ab45e316-3bab-41d9-b458-0e26073daeb5)
- *Confirmed the key fob is unpaired from ECU*
+ <div align="center">
+  <img width="611" alt="unpair_confirm" src="https://github.com/user-attachments/assets/d295a4f0-5072-4b44-bef4-3b858fcbc2e9" />
+</div>
+ 
 
 
  # Pairing Attacker key fob with vehicle
@@ -62,20 +64,26 @@ Upon completion of replaying captured signal from HackRF device, we confirmed wh
     Positive response 				   :6yy 0x04 0x71 0x01 0x02 0x06
 
 
+<div align="center">
+  <img width="533" alt="pair_keyfob" src="https://github.com/user-attachments/assets/00357ccd-9388-463b-b77c-813fdd08cb6c" />
 
-![image](https://github.com/user-attachments/assets/d9c0a950-ffa1-4797-8aed-7e89b04e53a5)
-*Pair the key fob using routine control service*
+</div>
 
-Confirm key fob paired with read UDS service using  DID 0xFD02.
+
+Confirm key fob paired with read UDS service using  DID 0xFD02.ECU responded with positive response with data as 0x01, it shows that one key fob is paired with vehicle.
 
         Read number of key fob paired with Vehicle DID 	:6xx 0x03 0x22 0xFD 0x02
         Positive response 			     		:6yy 0x04 0x62 0xFD 0x02 0x01
 
 
-![image](https://github.com/user-attachments/assets/09b7f08f-e642-480e-aaf4-c9d84878c3b2)
-*Confirm key fob paired with ECU*
+<div align="center">
+  <img width="508" alt="pair_confirm" src="https://github.com/user-attachments/assets/af01c7a3-0feb-4aea-bd83-5fea86704275" />
 
-As there is no security access implemented in system specific session, we were able to start key pairing routine and for key pairing there is no freshness counter or rolling code implemented so, captured pairing signal is valid for any time duration. whenever we replay the captured signal, the key fob gets paired with vehicle. The authentication algorithm  for LF-RF communication between key fob and Body control module ECU is weak. So, after replaying pairing signal from HackRF device original key fob is paired with Body control module ECU. 
+
+</div>
+
+
+As there is no security access implemented in system specific session, we were able to start key pairing routine and for key pairing there is no freshness counter or rolling code implemented so, captured pairing signal is valid for any time duration. whenever we replay the captured signal, the key fob gets paired with vehicle. The authentication algorithm  for LF-RF communication between key fob and Body control module ECU is weak. So, after replaying pairing signal from HackRF device key fob is paired with Body control module ECU.
 
 # Pairing Attacker key fob with multiple ECU/Vehicle
 After pairing key fob with captured key pairing signal with single ECU. We took Body control module ECU from other two different vehicle models of same OEM and performed the same procedure of unpairing the paired key fob and pairing the same key fob by replaying captured key pairing signal with the help of HackRF device.
@@ -92,13 +100,22 @@ Attacker can pair key fob with any vehicle of these vehicle models with the help
 In real life this attack is possible on these vehicle models. For this attack attacker needs physical access of OBDII port to connect bluetooth dongle and key fob of any of these vehicle models which will be easily available in market. For physical access of OBDII port, attacker can bribe service technician at garage can get physical access to OBD port. Once he gets access to OBD port, attacker can connect bluetooth dongle to OBD port which will execute the UDS commands remotely. When the vehicle owner is not near by the vehicle proximity, attacker can execute the UDS commands to start UDS pairing routine remotely. Once the pairing routine started, he can replay the key pairing signal using HackRF device remotely. Key fob can be paired from distance up to 5 meters from the vehicle.
 Once the key fob is paired with vehicle, attacker can gain unauthorised access to vehicle. With this access attacker can steal the vehicle or belongings of the owner kept inside the vehicle. 
 
+<div align="center">
+  
+![reduced_image](https://github.com/user-attachments/assets/ae793ac6-0f01-4880-8c87-27fea05491ff)
+
+
+</div>
+
 
 # Countermeasures
-We reported this vulnerability to the vehicle manufacturer and proposed the mitigation measures that could minimize the risk of this attack. Below are the mitigation measures.
-•	Use Advanced Encryption: Choose key fob systems that employ strong encryption methods, such as AES (Advanced Encryption Standard). These encryption techniques make it extremely difficult for attackers to intercept and clone the signals. 
-•	Rolling Code Technology: This technology changes the code transmitted by the key fob with each use. Even if an attacker intercepts one code, it won't work again, making it very secure. Most modern key fobs use this technology. 
-•	Secure Pairing: Ensure that your key fob and the receiver have a secure initial pairing process with protected UDS services. If the initial pairing isn't secure, attackers might be able to mimic your key fob.
+We reported this vulnerability to the vehicle manufacturer and provided a set of recommended mitigation measures to reduce the risk of exploitation. These proposed countermeasures are as follows:
 
+#Implement Strong Encryption: Adopt key fob systems that utilize robust encryption algorithms such as AES (Advanced Encryption Standard). Advanced encryption significantly increases the difficulty for attackers to intercept, analyze, or clone key fob signals.
+
+#Use Rolling Code Technology: Incorporate rolling code (hopping code) mechanisms, which generate a unique transmission code with every use. This ensures that even if an attacker captures a signal, it cannot be reused, thereby preventing replay attacks. This technology is widely adopted in modern key fob systems due to its effectiveness.
+
+#Secure the Pairing Process: Strengthen the initial pairing process between the key fob and the vehicle by implementing secure UDS (Unified Diagnostic Services) procedures. If this process is not properly secured, it may allow unauthorized actors to spoof or re-pair key fobs, compromising vehicle security.
 
 
 
