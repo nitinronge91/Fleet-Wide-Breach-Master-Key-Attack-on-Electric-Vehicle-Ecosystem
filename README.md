@@ -4,7 +4,7 @@
 
 We conducted a demonstration of a master key fob attack across multiple vehicle models from a major electric vehicle OEM. This attack leveraged vulnerabilities in both the key fob pairing process and the implementation of Unified Diagnostic Services (UDS). By exploiting these weaknesses, we were able to unpair the legitimate vehicle owner’s key fob and successfully pair a new, unauthorized key fob(from the same OEM) using a combination of UDS-based attacks and RF replay techniques.
 
-Notably, the key fob pairing mechanism is consistent across all vehicle models from the same OEM. As a result, we were able to replicate this attack on various models, highlighting a systemic vulnerability. Our proof-of-concept (PoC) was initially validated at the ECU (Electronic Control Unit) level and later executed in real-world scenarios on actual vehicles. This demonstrates that an attacker could gain access to multiple vehicle models using a single unauthorized key fob, effectively creating a “master key” applicable across the OEM's entire lineup.
+Notably, the key fob pairing mechanism is consistent across all vehicle models from the same OEM. As a result, we were able to replicate this attack on various models, highlighting a systemic vulnerability. Our proof-of-concept (PoC) was initially validated at the ECU (Electronic Control Unit) level and later executed in real-world scenarios on actual vehicles. This demonstrates that an attacker could gain access to multiple vehicle models using a single unauthorized key fob, effectively creating a “**Master key**” applicable across the OEM's entire lineup.
 We responsibly disclosed this vulnerability to the OEM, and the issue has since been remediated across all affected vehicle models.
 
 
@@ -20,7 +20,7 @@ Maximum of two key fobs can be paired with the vehicle. But there was no specifi
 
 # Unpairing Existing paired vehicle owner key fob
 As a part of our grey box PEN test approach, we performed UDS fuzzing on Body control module ECU for session control service($10), and through fuzzing we found system supplier specific session (0x10 0x60). We checked the security access in system supplier specific session, and we found that  no security access was implemented in system supplier specific session so, we were successfully able to fuzz routine control service. In system supplier specific session, performed UDS fuzzing for routine control service($31) and for routine identifiers 0x0207 and 0x0206 ECU responded with positive response. 
-We checked the effect of routine identifiers on ECU, and we came to know that after executing  routine 0x0207 Body control module is not responding to lock and unlock button press  from key fob i.e Body control module ECU is not switching the relay which are responsible for vehicle locking and unlocking. We confirmed the routine identifier 0x0207 is responsible for key pairing with vehicle.
+We checked the effect of routine identifiers on ECU, and we came to know that after executing  routine 0x0207 Body control module is not responding to lock and unlock button press  from key fob i.e Body control module ECU is not switching the relay which are responsible for vehicle locking and unlocking. We confirmed the routine identifier 0x0207 is responsible for key unpairing with vehicle.
 so, attacker can unpair existing owner key fob and which can cause inconvenience for owner. CAN communication log is captured and shown in below image.
 
     System supplier specific session request 	   :6xx 0x02 0x10 0x60
@@ -83,7 +83,7 @@ Confirm key fob paired with read UDS service using  DID 0xFD02.ECU responded wit
 </div>
 
 
-As there is no security access implemented in system specific session, we were able to start key pairing routine and for key pairing there is no freshness counter or rolling code implemented so, captured pairing signal is valid for any time duration. whenever we replay the captured signal, the key fob gets paired with vehicle. The authentication algorithm  for LF-RF communication between key fob and Body control module ECU is weak. So, after replaying pairing signal from HackRF device key fob is paired with Body control module ECU.
+As there is no security access implemented in system specific UDS session, we were able to start key pairing routine and for key pairing there is no freshness counter or rolling code implemented so, captured pairing signal is valid for any time duration. whenever we replay the captured signal, the key fob gets paired with vehicle. The authentication algorithm  for LF-RF communication between key fob and Body control module ECU is weak. So, after replaying pairing signal from HackRF device key fob is paired with Body control module ECU.
 
 # Pairing Attacker key fob with multiple ECU/Vehicle
 After pairing key fob with captured key pairing signal with single ECU. We took Body control module ECU from other two different vehicle models of same OEM and performed the same procedure of unpairing the paired key fob and pairing the same key fob by replaying captured key pairing signal with the help of HackRF device.
